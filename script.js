@@ -1,18 +1,25 @@
 function convert() {
-  document.getElementById("result").value =
-    document.getElementById("dollar").value * 100;
+  var dollarValue = document.getElementById("dollar").value;
+  // Converter o valor para um número
+  var numericValue = parseFloat(
+    dollarValue.replace(/\./g, "").replace(",", ".")
+  );
+  document.getElementById("result").value = numericValue * 100;
 }
 
+function mask(input) {
+  let value = input.value;
+  value = value.replace(/\D/g, "");
 
-function mask(){
-  value = document.getElementById("dollar").value.replace('.', '').replace(',', '').replace(/\D/g, '').replace(/[,!]/g, '')
+  value = (value / 100).toFixed(2) + "";
+  value = value.replace(".", ",");
 
-  const options = { minimumFractionDigits: 2 }
-  const result = new Intl.NumberFormat('pt-BR', options).format(
-    parseFloat(value) / 100
-  )
+  value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-  console.log(result)
-
-  return 'R$ ' + result
+  input.value = value;
 }
+
+// Adiciona o evento de entrada ao campo de entrada
+document.getElementById("dollar").addEventListener("input", function () {
+  mask(this);
+});
